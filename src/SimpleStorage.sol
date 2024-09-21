@@ -10,7 +10,7 @@ contract SimpleStorage {
     uint256 public favoriteNumber = 0;
     mapping(address => Person) public addressToFavouriteNumber;
 
-    function storeFavorite(uint256 _favoriteNumber) public {
+    function storeFavorite(uint256 _favoriteNumber) public virtual {
         favoriteNumber = _favoriteNumber;
     }
 
