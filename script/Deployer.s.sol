@@ -2,14 +2,14 @@
 pragma solidity 0.8.20;
 
 import {Script} from "forge-std/Script.sol";
+import {Meow} from "../src/Meow.sol";
 
 contract Deployer is Script {
-    function run() external {
-        uint256 deployerPK = vm.envUint("PRIVATE_KEY");
-        vm.startBroadcast(deployerPK);
-
-        // new SimpleStorage();
+    function run() external returns (Meow) {
+        vm.startBroadcast();
+        Meow meow = new Meow();
         vm.stopBroadcast();
+        return meow;
     }
 }
 
