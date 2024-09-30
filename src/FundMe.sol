@@ -24,6 +24,10 @@ contract FundMe {
         _;
     }
 
+    function getVersion() public view returns (uint256) {
+        return PriceConverter.getVersion();
+    }
+
     /**
      * @notice This function is used to fund the contract
      * @dev User needs to send minimum $5 worth of ETH

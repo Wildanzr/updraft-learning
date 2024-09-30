@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.20;
 
-import {Test} from "forge-std/Test.sol";
+import {Test, console} from "forge-std/Test.sol";
 import {FundMe} from "../src/FundMe.sol";
 
 contract FundMeTest is Test {
@@ -19,5 +19,10 @@ contract FundMeTest is Test {
     function testFailNotOwner() public {
         vm.prank(address(1));
         fundMe.withdraw();
+    }
+
+    function testVersion() public view {
+        console.log("Version", fundMe.getVersion());
+        assertEq(fundMe.getVersion(), 4);
     }
 }
