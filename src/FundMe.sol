@@ -3,6 +3,7 @@
 pragma solidity 0.8.20;
 
 import {PriceConverter} from "./PriceConverter.sol";
+import {AggregatorV3Interface} from "@chainlink/contracts/interfaces/AggregatorV3Interface.sol";
 
 error NotOwner();
 
@@ -11,12 +12,14 @@ contract FundMe {
 
     uint256 public constant MINIMUM_USD = 5e18;
     address public immutable owner;
+    AggregatorV3Interface private priceFeed;
 
     address[] public funders;
     mapping(address funder => uint256 amount) public addressToFundedAmount;
 
-    constructor() {
+    constructor(address _priceFeed) {
         owner = msg.sender;
+        priceFeed = AggregatorV3Interface(_priceFeed);
     }
 
     modifier onlyOwner() {
@@ -25,7 +28,7 @@ contract FundMe {
     }
 
     function getVersion() public view returns (uint256) {
-        return PriceConverter.getVersion();
+        return PriceConverter.getVersion(priceFeed);
     }
 
     /**
@@ -33,7 +36,7 @@ contract FundMe {
      * @dev User needs to send minimum $5 worth of ETH
      */
     function fund() public payable {
-        require(msg.value.getConversionRate() >= MINIMUM_USD, "E:01");
+        require(msg.value.getConversionRate(priceFeed) >= MINIMUM_USD, "E:01");
         addressToFundedAmount[msg.sender] += msg.value;
         funders.push(msg.sender);
     }
